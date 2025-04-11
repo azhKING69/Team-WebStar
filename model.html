@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esti-Mate - Construction Estimator</title>
+  <link rel="shortcut icon" href="/images/logo.jpg" type="image/x-icon">
+  <!-- Include Chart.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Navigation -->
+  <header>
+    <nav class="navbar">
+      <span class="hamburger-btn material-symbols-rounded">menu</span>
+      <a href="xtra.html" class="logo">
+        <img src="images/logo.jpg" alt="logo" />
+        <h2>Esti-mate</h2>
+      </a>
+      <ul class="links">
+        <span class="close-btn material-symbols-rounded">close</span>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="model.html">Model</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+      <button class="login-btn">LOG IN</button>
+    </nav>
+  </header>
+
+  <!-- Login/Signup Popup & Overlay -->
+  <div class="blur-bg-overlay"></div>
+  <div class="form-popup">
+    <span class="close-btn material-symbols-rounded">X</span>
+    <!-- Login Form -->
+    <div class="form-box login">
+      <div class="form-details">
+        <h2>Welcome Back</h2>
+        <p>Please log in using your personal information to stay connected with us.</p>
+      </div>
+      <div class="form-content">
+        <h2>LOGIN</h2>
+        <form action="#">
+          <div class="input-field">
+            <input type="text" required />
+            <label>Email</label>
+          </div>
+          <div class="input-field">
+            <input type="password" required />
+            <label>Password</label>
+          </div>
+          <a href="#" class="forgot-pass-link">Forgot password?</a>
+          <button type="submit">Log In</button>
+        </form>
+        <div class="bottom-link">
+          Don't have an account? <a href="#" id="signup-link">Signup</a>
+        </div>
+      </div>
+    </div>
+    <!-- Signup Form -->
+    <div class="form-box signup">
+      <div class="form-details">
+        <h2>Create Account</h2>
+        <p>To become a part of our community, please sign up using your personal information.</p>
+      </div>
+      <div class="form-content">
+        <h2>SIGNUP</h2>
+        <form action="#">
+          <div class="input-field">
+            <input type="text" required />
+            <label>Enter your email</label>
+          </div>
+          <div class="input-field">
+            <input type="password" required />
+            <label>Create password</label>
+          </div>
+          <div class="policy-text">
+            <input type="checkbox" id="policy" />
+            <label for="policy">I agree to the <a href="#" class="option">Terms & Conditions</a></label>
+          </div>
+          <button type="submit">Sign Up</button>
+        </form>
+        <div class="bottom-link">
+          Already have an account? <a href="#" id="login-link">Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
+  <div class="container">
+    <div class="page-heading">
+      <h1 style="color: white;">Esti-Mate</h1>
+    </div>
+
+    <!-- Form + Price Panel Section -->
+    <div class="input-section">
+      <!-- Form -->
+      <div class="form-wrapper">
+        <form id="estimatorForm">
+          <!-- Toggles: Input Method and Units -->
+          <div class="toggles-container">
+            <div class="toggle-section" id="inputToggle">
+              <div class="toggle-label">Input Method</div>
+              <div class="toggle-container">
+                <div class="toggle-option active" data-value="area">Area</div>
+                <div class="toggle-option" data-value="dims">Dimensions</div>
+              </div>
+            </div>
+            <div class="toggle-section" id="unitToggle">
+              <div class="toggle-label">Units</div>
+              <div class="toggle-container">
+                <div class="toggle-option active" data-value="feet">Feet</div>
+                <div class="toggle-option" data-value="meter">Meter</div>
+              </div>
+            </div>
+          </div>
+          <!-- Area Input -->
+          <div class="form-group" id="areaDiv">
+            <label class="form-label" for="area">Area</label>
+            <input type="number" id="area" class="form-input" placeholder="Area (sq ft)" required />
+          </div>
+          <!-- Dimensions Input -->
+          <div class="form-group" id="dimDiv" style="display:none;">
+            <label class="form-label">Dimensions</label>
+            <div class="flex-row">
+              <input type="number" id="length" class="form-input" placeholder="Length (ft)" />
+              <input type="number" id="breadth" class="form-input" placeholder="Breadth (ft)" />
+            </div>
+          </div>
+          <!-- Number of Floors -->
+          <div class="form-group">
+            <label class="form-label" for="numFloors">Number of Floors</label>
+            <input type="number" id="numFloors" class="form-input" placeholder="e.g. 4" min="1" required />
+          </div>
+          <!-- BHK Type -->
+          <div class="form-group">
+            <label class="form-label" for="plotType">Type</label>
+            <select id="plotType" class="form-input">
+              <option value="2BHK">2BHK</option>
+              <option value="3BHK">3BHK</option>
+            </select>
+          </div>
+          <button type="submit" class="btn">Estimate </button>
+        </form>
+      </div>
+      <!-- Price Panel -->
+      <div class="price-panel" id="pricePanel">
+        <h3>Current Unit Prices</h3>
+        <!-- Price items will be injected here -->
+      </div>
+    </div>
+
+
+
+    <!-- Results Containers -->
+    <!-- Bill of Quantities Table -->
+    <div class="results-wrapper" id="resultsWrapper">
+      <h2>Material Estimates </h2>
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Floor</th>
+            <th>Steel (Tonne)</th>
+            <th>Cement (Kg)</th>
+            <th>Sand (m³)</th>
+            <th>Gravel (tonne)</th>
+            <th>Subtotal (₹)</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <p class="grand-total">Total Estimated Cost: ₹<span id="grandTotalCost">0</span></p>
+    </div>
+
+    <!-- New Material Amounts Container -->
+    <div id="materialAmountContainer" style="display:none;"></div>
+
+    <!-- Material Consumption Pie Charts -->
+    <div class="results-wrapper" id="materialPieContainer">
+      <h2>Material Consumption Distribution per Floor</h2>
+      <div class="charts-container" id="materialCharts">
+        <!-- Material pie charts will be added here -->
+      </div>
+    </div>
+
+    <!-- Time Bar Chart -->
+    <div class="results-wrapper" id="timeChartContainer">
+      <h2>Time Required in Each Phase</h2>
+      <canvas id="timeBarChart"></canvas>
+    </div>
+
+    <!-- Timeline Diagram and Completion Time -->
+    <div class="results-wrapper" id="timelineContainer">
+      <h2>Timeline & Estimated Completion Time</h2>
+      <h3>Estimated Completion Time: <span id="totalTime"></span> Days</h3>
+      <div id="timelineBar"></div>
+    </div>
+
+    <!-- Labour Distribution and Cost Details -->
+    <div class="results-wrapper" id="labourContainer">
+      <h2>Labour Distribution and Costs</h2>
+      <div class="charts-container">
+        <div class="chart-item">
+          <h4>Labour Distribution</h4>
+          <canvas id="labourPieChart"></canvas>
+        </div>
+      </div>
+      <table class="results-table" id="labourTable">
+        <thead>
+          <tr>
+            <th>Labour Type</th>
+            <th>Count</th>
+            <th>Rate (₹)</th>
+            <th>Total (₹)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p class="grand-total">Total Labour Cost: ₹<span id="labourTotalCost">0</span></p>
+    </div>
+
+    <!-- Total Cost Comparison Bar Graph -->
+    <div class="results-wrapper" id="costComparisonContainer">
+      <h2>Total Cost Comparison (Materials & Labour)</h2>
+      <canvas id="totalCostBarChart"></canvas>
+    </div>
+
+    <!-- Total Construction Cost Container -->
+    <div id="totalCostContainer" class="total-cost-container" style="display: none;">
+      <h3>Total Construction Cost: ₹<span id="totalConstructionCost">0.00</span></h3>
+    </div>
+
+
+    <!-- Future Cost Projection Graph -->
+    <div class="results-wrapper" id="futureCostChartContainer">
+      <h2>Future Cost Projection</h2>
+      <canvas id="futureCostChart"></canvas>
+    </div>
+
+    <!-- Past Data Section -->
+    <div class="results-wrapper" id="pastDataContainer">
+      <h2>Past Data</h2>
+      <table class="results-table" id="pastDataTable">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Area</th>
+            <th>Floors</th>
+            <th>Total Cost (₹)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Download All Data Button -->
+    <a id="downloadButton">Download All Results</a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
